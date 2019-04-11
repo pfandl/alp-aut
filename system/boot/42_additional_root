@@ -1,0 +1,18 @@
+#!/bin/sh
+
+LINUX=$(. /etc/grub.d/10_linux)
+
+# Will be set by Makefile.
+VOLUME_GROUP=
+ROOT=
+ROOT_2=
+
+entry() {
+	local root=$1
+	echo "$LINUX" | \
+	     sed -e "s/menuentry '\(.*\)' --class/menuentry '\1 ($root)'/g"     | \
+	     sed -e "s|\(/dev/mapper/$VOLUME_GROUP-\)[[:alnum:]_-]\+|\1$root|g"
+}
+
+entry $ROOT
+entry $ROOT_2
